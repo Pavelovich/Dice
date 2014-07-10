@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <time.h>
+#include <strings.h>
+#include <stdlib.h>
 
 /*
 *	Standard C functions personal library
-*	Copyright © 2014 Sasha Pavelovich
+*	Copyright © 2014 Aleksandr Pavelovich
 *	Free and open source under the MIT license
 *
 *
@@ -13,7 +15,7 @@ int intro(char name[30], int year, char license[10])
 {
 	printf("------------------------------------------------------------------------------------------------------------------\n");
 	printf("|                     %30s                                                             |\n", name);
-	printf("|                     Copyright © %4d Sasha Pavelovich                                                          |\n", year);
+	printf("|                     Copyright © %4d Aleksandr Pavelovich                                                      |\n", year);
 	printf("|                     Free and open source software for modification and distribution under the                  |\n");
 	printf("|                     %10s license                                                                         |\n", license);
 	printf("|                                                                                                                |\n");
@@ -30,14 +32,20 @@ int askInt(char question[200])
 	return number;
 }
 
-char askChar(char question[200])
+char *askChar(char *question)
 {
-	char text[200];
+	char *text = malloc(200*sizeof(char)); // Bro, do you even malloc?
 	printf("%s", question);
-	scanf("%s", text);
+	scanf("%[^\n]", text);
 	//printf("The string is: %s \n", text);
-	return *text;
+	return text;
 }
+
+/* An example setup ^
+ * ------------------------------------
+ * char *q1 = askChar("Enter your name: ");
+ * printf("%s \n", q1);
+*/
 
 double askDouble(char question[200])
 {
@@ -79,5 +87,25 @@ int busyRun(int runs)
 	while (number < runs) {
 		number++;
 	}
+	return 0;
+}
+
+char printOut(int rate, char *string) // Set around 10 or 20 for the rate
+{
+	for (int i = 0; i <= strlen(string); i++)
+		{
+			printf("%c", string[i]);
+			fflush(stdout);
+			busyRun(rate*1000000);
+		}
+	return 0;
+}
+
+int cmd(char command[200])
+{
+	char cmdVar[200];
+	strcpy(cmdVar, command);
+	printf("Executing command: %s\nOutput:\n", command);
+	system(cmdVar);
 	return 0;
 }
