@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 		int dice = askInt("How many dice do you want to roll? ");
 		if (dice == 8888)
 		{
-			printf("Exiting program...");
+			printf("Exiting program...\n");
 			exit(0);
 		}
 		for (int rolls = 1; rolls <= dice; rolls++) {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 				two++;
 			else
 				one++;
-			busyRun(1000000);
+			//busyRun(1000000);
 		}
 		printf("Six: %d\nFive: %d\nFour: %d\nThree: %d\nTwo: %d\nOne: %d\n", six, five, four, three, two, one);
 	}

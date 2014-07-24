@@ -11,6 +11,9 @@
 *
 */
 
+#ifndef STDFN_H
+#define STDFN_H
+
 int intro(char name[30], int year, char license[10])
 {
 	printf("------------------------------------------------------------------------------------------------------------------\n");
@@ -56,6 +59,9 @@ double askDouble(char question[200])
 	return number;
 }
 
+int gRan1 = 1;
+int gRan2 = 1;
+int gRan3 = 1;
 int ranGen(void)
 {
 	time_t rawtime;
@@ -71,12 +77,15 @@ int ranGen(void)
 	int ran5 = info->tm_sec;
 	int ran6 = microseconds;
 	//printf("%d %d %d %d %d \n", ran1, ran2, ran3, ran4, ran5);
-	int randomNumber = (((ran1+ran2+ran3+ran4+ran5+ran6)*(ran1%10)*ran1*ran2*ran3*ran6/(ran4%1000)+ran1-(ran5%1000000000))%100);
+	int randomNumber = (((ran1+ran2+gRan1+ran3+ran4+ran5+gRan2+ran6)*(ran1%10)*ran1*ran2*gRan3*ran3*ran6/(ran4%1000)+ran1-(ran5%1000000000))%100);
 	randomNumber = (randomNumber*ran5+ran6)%100;
 	if (randomNumber < 0)
 	{
 		randomNumber = randomNumber * -1;
 	}
+	gRan1 = randomNumber * gRan2 * gRan3 * 4 + 10;
+	gRan2 = randomNumber * gRan1 * gRan3 * 2 + 10;
+	gRan3 = randomNumber * gRan1 * gRan2 * 3 + 10;
 	//printf("%d", randomNumber);
 	return randomNumber;
 }
@@ -101,6 +110,7 @@ char printOut(int rate, char *string) // Set around 10 or 20 for the rate
 	return 0;
 }
 
+// This function does not even lift.  Please use the one after it.
 int cmd(char command[200])
 {
 	char cmdVar[200];
@@ -109,3 +119,23 @@ int cmd(char command[200])
 	system(cmdVar);
 	return 0;
 }
+
+char* bash(char *cmd)
+{
+	FILE *pcmd = popen(cmd, "r");
+	char *output = malloc(200*sizeof(char));
+	char *poutput = malloc(200*sizeof(char));
+	if (pcmd == NULL)
+	{
+		printf("The command failed\n");
+		exit(0);
+	}
+	while (fgets(output, sizeof(output)-1, pcmd) != NULL)
+	{
+		strcat(poutput, output);
+	}
+	pclose(pcmd);
+	return poutput;
+}
+
+#endif
